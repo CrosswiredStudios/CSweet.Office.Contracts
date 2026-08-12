@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>CSweet.SatelliteOffice.Contracts</PackageId>
+    <Version>1.0.0</Version>
+    <PackageVersion Condition="'$(CSweetSatelliteOfficeContractsPackageVersion)' != ''">$(CSweetSatelliteOfficeContractsPackageVersion)</PackageVersion>
+    <Authors>C-Sweet</Authors>
+    <Company>C-Sweet</Company>
+    <Description>Wire contracts shared by C-Sweet Headquarters and C-Sweet Satellite Office.</Description>
+    <PackageTags>csweet;satellite-office;contracts;grpc;agents</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/CrosswiredStudios/CSweet.SatelliteOffice.Contracts</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.35.1" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.83.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.83.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.102" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="ControlPlane\satellite_office_control.proto" GrpcServices="Both" />
+    <Protobuf Include="Guest\guest_broker.proto" GrpcServices="None" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

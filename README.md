@@ -1,2 +1,18 @@
 # CSweet.SatelliteOffice.Contracts
 
+Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Satellite Office.
+
+The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Satellite Office repository.
+
+## Packages
+
+`CSweet.SatelliteOffice.Contracts` targets .NET 8 and is released with SourceLink and symbol packages. Releases follow semantic versioning. Breaking wire or public API changes require a major version; additive compatible changes require a minor version; compatible fixes require a patch version.
+
+## Local development
+
+```powershell
+dotnet test CSweet.SatelliteOffice.Contracts.slnx -c Release
+dotnet pack src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj -c Release -o artifacts/packages
+```
+
+Consumers may opt into a sibling project reference by setting `UseLocalSatelliteOfficeContracts=true`. Release validation must also run with that property disabled against the exact package version.

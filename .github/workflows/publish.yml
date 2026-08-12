@@ -1,0 +1,25 @@
+name: publish-nuget
+on:
+  push:
+    tags: ['v*.*.*']
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: nuget-production
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0.x' }
+      - name: Verify tag matches package version
+        shell: pwsh
+        run: |
+          $tag = '${{ github.ref_name }}'.TrimStart('v')
+          $project = [xml](Get-Content src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj)
+          if ($tag -ne $project.Project.PropertyGroup.Version) { throw "Tag $tag does not match package version." }
+      - run: dotnet test CSweet.SatelliteOffice.Contracts.slnx -c Release
+      - run: dotnet pack src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj -c Release --no-build -o artifacts/packages
+      - run: dotnet nuget push 'artifacts/packages/*.nupkg' --api-key '${{ secrets.NUGET_API_KEY }}' --source https://api.nuget.org/v3/index.json --skip-duplicate

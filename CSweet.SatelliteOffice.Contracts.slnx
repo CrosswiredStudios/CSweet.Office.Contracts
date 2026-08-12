@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/CSweet.SatelliteOffice.Contracts.Tests/CSweet.SatelliteOffice.Contracts.Tests.csproj" />
+  </Folder>
+</Solution>
