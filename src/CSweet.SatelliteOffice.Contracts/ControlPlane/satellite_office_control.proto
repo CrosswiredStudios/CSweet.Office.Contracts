@@ -40,6 +40,12 @@ message SatelliteOfficeHeartbeat {
   int32 allocatable_disk_mb = 4;
   int32 maximum_concurrent_workloads = 5;
   repeated SatelliteOfficeProviderInventory providers = 6;
+  SatelliteOfficeSecurityPosture security_posture = 7;
+}
+message SatelliteOfficeSecurityPosture {
+  string profile = 1; bool mixed_use_host = 2; bool development_assignments_allowed = 3;
+  repeated string enabled_controls = 4; repeated string missing_controls = 5;
+  int64 evaluated_at_unix_seconds = 6;
 }
 message SatelliteOfficeProviderInventory {
   string provider_id = 1; string provider_version = 2; string broker_protocol_version = 3;
@@ -52,6 +58,7 @@ message WorkloadAssignment {
   string assignment_id = 1; string workload_id = 2; int64 fencing_epoch = 3; string provider_id = 4;
   string specification_json = 5; string specification_sha256 = 6; string signature_key_id = 7;
   bytes signature = 8; int64 lease_expires_at_unix_seconds = 9; string artifact_read_token = 10;
+  int64 issued_at_unix_seconds = 11; int32 authorization_version = 12;
 }
 message AssignmentLeaseRenewal { string assignment_id = 1; int64 fencing_epoch = 2; int64 requested_expiry_unix_seconds = 3; }
 message AssignmentStatusUpdate {

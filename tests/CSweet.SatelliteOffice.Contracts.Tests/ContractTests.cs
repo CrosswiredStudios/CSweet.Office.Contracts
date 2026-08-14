@@ -12,6 +12,24 @@ namespace CSweet.SatelliteOffice.Contracts.Tests;
 public sealed class ContractTests
 {
     [Fact]
+    public void SecurityPostureRoundTripsWithoutDroppingConsentOrControls()
+    {
+        var report = new SatelliteOfficeSecurityPostureReport(
+            "development", true, true, ["secure-boot"], ["dedicated-host"],
+            DateTimeOffset.Parse("2026-08-13T20:00:00Z"));
+
+        var json = JsonSerializer.Serialize(report);
+        var roundTrip = JsonSerializer.Deserialize<SatelliteOfficeSecurityPostureReport>(json);
+
+        Assert.NotNull(roundTrip);
+        Assert.Equal(report.Profile, roundTrip.Profile);
+        Assert.Equal(report.MixedUseHost, roundTrip.MixedUseHost);
+        Assert.Equal(report.DevelopmentAssignmentsAllowed, roundTrip.DevelopmentAssignmentsAllowed);
+        Assert.Equal(report.EnabledControls, roundTrip.EnabledControls);
+        Assert.Equal(report.MissingControls, roundTrip.MissingControls);
+        Assert.Equal(report.EvaluatedAt, roundTrip.EvaluatedAt);
+    }
+    [Fact]
     public void Runtime_workload_round_trips()
     {
         var value = new RuntimeWorkloadSpecification(
@@ -37,13 +55,38 @@ public sealed class ContractTests
     {
         var office = Guid.Parse("11111111-1111-1111-1111-111111111111");
         var assignment = Guid.Parse("22222222-2222-2222-2222-222222222222");
+        var workload = Guid.Parse("33333333-3333-3333-3333-333333333333");
+        var issued = DateTimeOffset.FromUnixTimeSeconds(1_799_999_700);
         var expires = DateTimeOffset.FromUnixTimeSeconds(1_800_000_000);
+        var digest = "sha256:" + new string('a', 64);
         Assert.Equal(
-            AssignmentEnvelope.Payload(office, assignment, 4, "digest", expires, "token"),
-            AssignmentEnvelope.Payload(office, assignment, 4, "digest", expires, "token"));
+            AssignmentEnvelope.Payload(office, assignment, workload, 4, "hyperv-gen2", digest, issued, expires),
+            AssignmentEnvelope.Payload(office, assignment, workload, 4, "hyperv-gen2", digest, issued, expires));
+    }
+
+    [Fact]
+    public void Assignment_payload_binds_all_privileged_routing_fields()
+    {
+        var office = Guid.NewGuid();
+        var assignment = Guid.NewGuid();
+        var workload = Guid.NewGuid();
+        var issued = DateTimeOffset.FromUnixTimeSeconds(1_799_999_700);
+        var expires = issued.AddMinutes(5);
+        var digest = "sha256:" + new string('a', 64);
+        var baseline = AssignmentEnvelope.Payload(office, assignment, workload, 4, "hyperv-gen2", digest, issued, expires);
+
+        Assert.NotEqual(baseline, AssignmentEnvelope.Payload(office, assignment, Guid.NewGuid(), 4, "hyperv-gen2", digest, issued, expires));
+        Assert.NotEqual(baseline, AssignmentEnvelope.Payload(office, assignment, workload, 4, "firecracker", digest, issued, expires));
+        Assert.NotEqual(baseline, AssignmentEnvelope.Payload(office, assignment, workload, 5, "hyperv-gen2", digest, issued, expires));
+        Assert.NotEqual(baseline, AssignmentEnvelope.Payload(office, assignment, workload, 4, "hyperv-gen2", "sha256:" + new string('b', 64), issued, expires));
+    }
+
+    [Fact]
+    public void Assignment_specification_digest_uses_canonical_sha256_reference()
+    {
         Assert.Equal(
-            "11111111-1111-1111-1111-111111111111\n22222222-2222-2222-2222-222222222222\n4\ndigest\n1800000000\ntoken",
-            System.Text.Encoding.UTF8.GetString(AssignmentEnvelope.Payload(office, assignment, 4, "digest", expires, "token")));
+            "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+            AssignmentEnvelope.Digest("{}"));
     }
 
     [Fact]

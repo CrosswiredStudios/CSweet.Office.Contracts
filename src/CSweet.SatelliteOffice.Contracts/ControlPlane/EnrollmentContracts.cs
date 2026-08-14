@@ -16,7 +16,16 @@ public sealed record ClaimSatelliteOfficeRequest(
     int AllocatableMemoryMb,
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
-    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers);
+    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers,
+    SatelliteOfficeSecurityPostureReport? SecurityPosture = null);
+
+public sealed record SatelliteOfficeSecurityPostureReport(
+    string Profile,
+    bool MixedUseHost,
+    bool DevelopmentAssignmentsAllowed,
+    IReadOnlyList<string> EnabledControls,
+    IReadOnlyList<string> MissingControls,
+    DateTimeOffset EvaluatedAt);
 
 public sealed record RegisterSatelliteOfficeProviderRequest(
     string ProviderId,
@@ -37,7 +46,13 @@ public sealed record ClaimSatelliteOfficeResponse(
     string? ErrorCode,
     string Message,
     Guid? SatelliteOfficeId,
-    string? EnrollmentReceipt);
+    string? EnrollmentReceipt,
+    string? AssignmentSigningKeyId = null,
+    string? AssignmentVerificationPublicKeyBase64 = null);
+
+public sealed record HeadquartersAssignmentTrustResponse(
+    string AssignmentSigningKeyId,
+    string AssignmentVerificationPublicKeyBase64);
 
 public sealed record SatelliteOfficeHeartbeatRequest(
     string EnrollmentReceipt,
@@ -46,7 +61,8 @@ public sealed record SatelliteOfficeHeartbeatRequest(
     int AllocatableMemoryMb,
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
-    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers);
+    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers,
+    SatelliteOfficeSecurityPostureReport? SecurityPosture = null);
 
 public sealed record SatelliteOfficeCertificateRequest(string EnrollmentReceipt);
 
