@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-option csharp_namespace = "CSweet.SatelliteOffice.Contracts.Guest";
-package csweet.satelliteoffice.guest.v1;
+option csharp_namespace = "CSweet.Office.Contracts.Guest";
+package csweet.office.guest.v1;
 
 message GuestEnvelope {
   string protocol_version = 1; string message_id = 2;

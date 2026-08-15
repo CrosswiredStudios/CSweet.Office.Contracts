@@ -1,4 +1,4 @@
-namespace CSweet.SatelliteOffice.Contracts.Workloads;
+namespace CSweet.Office.Contracts.Workloads;
 
 public enum AgentTrustLevel
 {

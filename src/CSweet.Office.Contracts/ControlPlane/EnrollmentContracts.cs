@@ -1,12 +1,12 @@
-namespace CSweet.SatelliteOffice.Contracts.ControlPlane;
+namespace CSweet.Office.Contracts.ControlPlane;
 
-public sealed record ClaimSatelliteOfficeRequest(
+public sealed record ClaimOfficeRequest(
     string EnrollmentToken,
     string Name,
     string MachineName,
     string OperatingSystem,
     string Architecture,
-    string SatelliteOfficeVersion,
+    string OfficeVersion,
     string ProtocolVersion,
     string CertificateThumbprint,
     string CertificateSerialNumber,
@@ -16,10 +16,10 @@ public sealed record ClaimSatelliteOfficeRequest(
     int AllocatableMemoryMb,
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
-    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers,
-    SatelliteOfficeSecurityPostureReport? SecurityPosture = null);
+    IReadOnlyList<RegisterOfficeProviderRequest> Providers,
+    OfficeSecurityPostureReport? SecurityPosture = null);
 
-public sealed record SatelliteOfficeSecurityPostureReport(
+public sealed record OfficeSecurityPostureReport(
     string Profile,
     bool MixedUseHost,
     bool DevelopmentAssignmentsAllowed,
@@ -27,7 +27,7 @@ public sealed record SatelliteOfficeSecurityPostureReport(
     IReadOnlyList<string> MissingControls,
     DateTimeOffset EvaluatedAt);
 
-public sealed record RegisterSatelliteOfficeProviderRequest(
+public sealed record RegisterOfficeProviderRequest(
     string ProviderId,
     string ProviderVersion,
     string BrokerProtocolVersion,
@@ -41,11 +41,11 @@ public sealed record RegisterSatelliteOfficeProviderRequest(
     bool IsAvailable,
     string? UnavailableReason);
 
-public sealed record ClaimSatelliteOfficeResponse(
+public sealed record ClaimOfficeResponse(
     bool Succeeded,
     string? ErrorCode,
     string Message,
-    Guid? SatelliteOfficeId,
+    Guid? OfficeId,
     string? EnrollmentReceipt,
     string? AssignmentSigningKeyId = null,
     string? AssignmentVerificationPublicKeyBase64 = null);
@@ -54,19 +54,19 @@ public sealed record HeadquartersAssignmentTrustResponse(
     string AssignmentSigningKeyId,
     string AssignmentVerificationPublicKeyBase64);
 
-public sealed record SatelliteOfficeHeartbeatRequest(
+public sealed record OfficeHeartbeatRequest(
     string EnrollmentReceipt,
     long SessionEpoch,
     int AllocatableCpuCount,
     int AllocatableMemoryMb,
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
-    IReadOnlyList<RegisterSatelliteOfficeProviderRequest> Providers,
-    SatelliteOfficeSecurityPostureReport? SecurityPosture = null);
+    IReadOnlyList<RegisterOfficeProviderRequest> Providers,
+    OfficeSecurityPostureReport? SecurityPosture = null);
 
-public sealed record SatelliteOfficeCertificateRequest(string EnrollmentReceipt);
+public sealed record OfficeCertificateRequest(string EnrollmentReceipt);
 
-public sealed record SatelliteOfficeCertificateResponse(
+public sealed record OfficeCertificateResponse(
     bool Succeeded,
     string? ErrorCode,
     string Message,

@@ -18,8 +18,8 @@ jobs:
         shell: pwsh
         run: |
           $tag = '${{ github.ref_name }}'.TrimStart('v')
-          $project = [xml](Get-Content src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj)
+          $project = [xml](Get-Content src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj)
           if ($tag -ne $project.Project.PropertyGroup.Version) { throw "Tag $tag does not match package version." }
-      - run: dotnet test CSweet.SatelliteOffice.Contracts.slnx -c Release
-      - run: dotnet pack src/CSweet.SatelliteOffice.Contracts/CSweet.SatelliteOffice.Contracts.csproj -c Release --no-build -o artifacts/packages
+      - run: dotnet test CSweet.Office.Contracts.slnx -c Release
+      - run: dotnet pack src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj -c Release --no-build -o artifacts/packages
       - run: dotnet nuget push 'artifacts/packages/*.nupkg' --api-key '${{ secrets.NUGET_API_KEY }}' --source https://api.nuget.org/v3/index.json --skip-duplicate

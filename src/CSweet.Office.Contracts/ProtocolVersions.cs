@@ -1,4 +1,4 @@
-namespace CSweet.SatelliteOffice.Contracts;
+namespace CSweet.Office.Contracts;
 
 public static class ProtocolVersions
 {

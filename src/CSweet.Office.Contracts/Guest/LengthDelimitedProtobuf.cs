@@ -1,7 +1,7 @@
 using System.Buffers.Binary;
 using Google.Protobuf;
 
-namespace CSweet.SatelliteOffice.Contracts.Guest;
+namespace CSweet.Office.Contracts.Guest;
 
 public static class LengthDelimitedProtobuf
 {

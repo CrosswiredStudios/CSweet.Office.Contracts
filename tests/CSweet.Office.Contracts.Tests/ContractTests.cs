@@ -1,25 +1,25 @@
 using System.Text.Json;
-using CSweet.SatelliteOffice.Contracts.ControlPlane;
-using CSweet.SatelliteOffice.Contracts.Security;
-using CSweet.SatelliteOffice.Contracts.Workloads;
+using CSweet.Office.Contracts.ControlPlane;
+using CSweet.Office.Contracts.Security;
+using CSweet.Office.Contracts.Workloads;
 using Xunit;
 using Google.Protobuf;
 using System.Buffers.Binary;
-using CSweet.SatelliteOffice.Contracts.Guest;
+using CSweet.Office.Contracts.Guest;
 
-namespace CSweet.SatelliteOffice.Contracts.Tests;
+namespace CSweet.Office.Contracts.Tests;
 
 public sealed class ContractTests
 {
     [Fact]
     public void SecurityPostureRoundTripsWithoutDroppingConsentOrControls()
     {
-        var report = new SatelliteOfficeSecurityPostureReport(
+        var report = new OfficeSecurityPostureReport(
             "development", true, true, ["secure-boot"], ["dedicated-host"],
             DateTimeOffset.Parse("2026-08-13T20:00:00Z"));
 
         var json = JsonSerializer.Serialize(report);
-        var roundTrip = JsonSerializer.Deserialize<SatelliteOfficeSecurityPostureReport>(json);
+        var roundTrip = JsonSerializer.Deserialize<OfficeSecurityPostureReport>(json);
 
         Assert.NotNull(roundTrip);
         Assert.Equal(report.Profile, roundTrip.Profile);
@@ -92,25 +92,25 @@ public sealed class ContractTests
     [Fact]
     public void Generated_gateway_message_round_trips()
     {
-        var original = new SatelliteOfficeControlMessage
+        var original = new OfficeControlMessage
         {
             ProtocolVersion = ProtocolVersions.ControlPlaneV1,
-            SatelliteOfficeId = Guid.NewGuid().ToString("D")
+            OfficeId = Guid.NewGuid().ToString("D")
         };
-        var parsed = SatelliteOfficeControlMessage.Parser.ParseFrom(original.ToByteArray());
+        var parsed = OfficeControlMessage.Parser.ParseFrom(original.ToByteArray());
         Assert.Equal(original.ProtocolVersion, parsed.ProtocolVersion);
-        Assert.Equal(original.SatelliteOfficeId, parsed.SatelliteOfficeId);
+        Assert.Equal(original.OfficeId, parsed.OfficeId);
     }
 
     [Fact]
     public void Generated_gateway_preserves_unknown_fields()
     {
-        var known = new SatelliteOfficeControlMessage { ProtocolVersion = "1.0" }.ToByteArray();
+        var known = new OfficeControlMessage { ProtocolVersion = "1.0" }.ToByteArray();
         var bytes = known.Concat(new byte[] { 0x98, 0x06, 0x2a }).ToArray(); // field 99, varint 42
-        var parsed = SatelliteOfficeControlMessage.Parser.ParseFrom(bytes);
+        var parsed = OfficeControlMessage.Parser.ParseFrom(bytes);
 
         Assert.Equal(new byte[] { 0x98, 0x06, 0x2a }, parsed.ToByteArray()[^3..]);
-        Assert.Equal("SatelliteOfficeGateway", SatelliteOfficeGateway.Descriptor.Name);
+        Assert.Equal("OfficeGateway", OfficeGateway.Descriptor.Name);
     }
 
     [Fact]

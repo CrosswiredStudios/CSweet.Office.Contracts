@@ -5,5 +5,5 @@
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
   </ItemGroup>
-  <ItemGroup><ProjectReference Include="..\..\src\CSweet.SatelliteOffice.Contracts\CSweet.SatelliteOffice.Contracts.csproj" /></ItemGroup>
+  <ItemGroup><ProjectReference Include="..\..\src\CSweet.Office.Contracts\CSweet.Office.Contracts.csproj" /></ItemGroup>
 </Project>

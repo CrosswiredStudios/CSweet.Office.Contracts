@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Google.Protobuf;
 
-namespace CSweet.SatelliteOffice.Contracts.Guest;
+namespace CSweet.Office.Contracts.Guest;
 
 public sealed record ExpectedGuestIdentity(
     Guid WorkloadId,

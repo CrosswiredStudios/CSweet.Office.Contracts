@@ -2,19 +2,19 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Buffers.Binary;
 
-namespace CSweet.SatelliteOffice.Contracts.Security;
+namespace CSweet.Office.Contracts.Security;
 
 public static class AssignmentEnvelope
 {
     public const int CurrentAuthorizationVersion = 1;
-    private static readonly byte[] Purpose = "CSweet.SatelliteOffice.WorkloadAuthorization"u8.ToArray();
+    private static readonly byte[] Purpose = "CSweet.Office.WorkloadAuthorization"u8.ToArray();
 
     public static string Digest(string specificationJson) =>
         "sha256:" + Convert.ToHexString(
             SHA256.HashData(Encoding.UTF8.GetBytes(specificationJson))).ToLowerInvariant();
 
     public static byte[] Payload(
-        Guid satelliteOfficeId,
+        Guid officeId,
         Guid assignmentId,
         Guid workloadId,
         long fencingEpoch,
@@ -33,7 +33,7 @@ public static class AssignmentEnvelope
         using var stream = new MemoryStream(256);
         WriteBytes(stream, Purpose);
         stream.WriteByte(CurrentAuthorizationVersion);
-        WriteGuid(stream, satelliteOfficeId);
+        WriteGuid(stream, officeId);
         WriteGuid(stream, assignmentId);
         WriteGuid(stream, workloadId);
         WriteInt64(stream, fencingEpoch);
