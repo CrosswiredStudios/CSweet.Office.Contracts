@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>CSweet.Office.Contracts</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.3.0</Version>
     <PackageVersion Condition="'$(CSweetOfficeContractsPackageVersion)' != ''">$(CSweetOfficeContractsPackageVersion)</PackageVersion>
     <Authors>C-Sweet</Authors>
     <Company>C-Sweet</Company>

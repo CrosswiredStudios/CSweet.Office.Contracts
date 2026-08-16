@@ -66,7 +66,12 @@ public sealed record RepositoryDescriptor(
     string BuildProfileId,
     string BuildProfileVersion);
 
-public sealed record RuntimeAgentIdentity(Guid InstallationId, string BusinessId, Guid TickId);
+public sealed record RuntimeAgentIdentity(
+    Guid InstallationId,
+    string BusinessId,
+    Guid TickId,
+    string? AgentDisplayName = null,
+    string? AgentRoleName = null);
 
 public abstract record WorkloadSpecification(
     Guid WorkloadId,

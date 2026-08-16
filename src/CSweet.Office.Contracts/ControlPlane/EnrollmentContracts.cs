@@ -17,7 +17,29 @@ public sealed record ClaimOfficeRequest(
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
     IReadOnlyList<RegisterOfficeProviderRequest> Providers,
-    OfficeSecurityPostureReport? SecurityPosture = null);
+    OfficeSecurityPostureReport? SecurityPosture = null,
+    Guid? AssistedSetupSessionId = null);
+
+public sealed record RedeemAssistedOfficeSetupRequest(
+    string HandoffSecret,
+    string MachineName,
+    string OperatingSystem,
+    string Architecture,
+    string OfficeVersion);
+
+public sealed record RedeemAssistedOfficeSetupResponse(
+    bool Succeeded,
+    string? ErrorCode,
+    string Message,
+    Guid? AssistedSetupSessionId,
+    string? EnrollmentToken,
+    string? ControlPlaneUrl,
+    string? ControlPlaneCertificateSha256,
+    int AllocatableCpuCount,
+    int AllocatableMemoryMb,
+    int AllocatableDiskMb,
+    int MaximumConcurrentWorkloads,
+    bool MixedUseHost);
 
 public sealed record OfficeSecurityPostureReport(
     string Profile,

@@ -12,6 +12,22 @@ namespace CSweet.Office.Contracts.Tests;
 public sealed class ContractTests
 {
     [Fact]
+    public void AssistedSetupContractsRoundTripAllocationAndSessionBinding()
+    {
+        var sessionId = Guid.NewGuid();
+        var redemption = new RedeemAssistedOfficeSetupResponse(
+            true, null, "ready", sessionId, "one-use-token", "https://office.example.test",
+            new string('a', 64), 6, 12288, 81920, 3, true);
+
+        var roundTrip = JsonSerializer.Deserialize<RedeemAssistedOfficeSetupResponse>(
+            JsonSerializer.Serialize(redemption));
+
+        Assert.Equal(redemption, roundTrip);
+        Assert.Equal(sessionId, roundTrip!.AssistedSetupSessionId);
+        Assert.True(roundTrip.MixedUseHost);
+    }
+
+    [Fact]
     public void SecurityPostureRoundTripsWithoutDroppingConsentOrControls()
     {
         var report = new OfficeSecurityPostureReport(
@@ -37,7 +53,8 @@ public sealed class ContractTests
             new(1, 100, 512, 1024, 64, 4096, TimeSpan.FromMinutes(5)),
             new(Guid.NewGuid(), "1.0", new string('b', 32), "sha256:" + new string('a', 64), null, DateTimeOffset.UtcNow.AddMinutes(5)),
             new("sha256:" + new string('c', 64), "signature", "1", "linux", "x64"),
-            new(Guid.NewGuid(), "business", Guid.NewGuid()), ["dotnet", "Agent.dll"]);
+            new(Guid.NewGuid(), "business", Guid.NewGuid(), "Ada Lovelace", "Software Developer"),
+            ["dotnet", "Agent.dll"]);
 
         var roundTrip = JsonSerializer.Deserialize<RuntimeWorkloadSpecification>(JsonSerializer.Serialize(value));
         Assert.NotNull(roundTrip);
@@ -47,6 +64,8 @@ public sealed class ContractTests
         Assert.Equal(value.BrokerLease, roundTrip.BrokerLease);
         Assert.Equal(value.Artifact, roundTrip.Artifact);
         Assert.Equal(value.Identity, roundTrip.Identity);
+        Assert.Equal("Ada Lovelace", roundTrip.Identity.AgentDisplayName);
+        Assert.Equal("Software Developer", roundTrip.Identity.AgentRoleName);
         Assert.Equal(value.Entrypoint, roundTrip.Entrypoint);
     }
 
