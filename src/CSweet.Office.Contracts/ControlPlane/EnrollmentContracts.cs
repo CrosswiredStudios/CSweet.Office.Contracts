@@ -39,7 +39,40 @@ public sealed record RedeemAssistedOfficeSetupResponse(
     int AllocatableMemoryMb,
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
-    bool MixedUseHost);
+    bool MixedUseHost,
+    string ExistingInstallationAction = "none",
+    string? SetupReceipt = null);
+
+public sealed record AssistedOfficePreflightRequest(
+    string HandoffSecret,
+    string MachineName,
+    string OperatingSystem,
+    string Architecture,
+    string OfficeVersion,
+    string ExistingInstallationState);
+
+public sealed record AssistedOfficePreflightResponse(
+    bool Succeeded,
+    string? ErrorCode,
+    string Message,
+    Guid? AssistedSetupSessionId,
+    string ExistingInstallationAction,
+    bool ProceedToRedemption,
+    string? SetupReceipt = null);
+
+public sealed record ReportAssistedOfficeSetupResultRequest(
+    Guid AssistedSetupSessionId,
+    string SetupReceipt,
+    string ResultCode,
+    string MachineName,
+    string OperatingSystem,
+    string Architecture);
+
+public sealed record CompleteAssistedOfficeRemovalRequest(
+    string HandoffSecret,
+    string MachineName,
+    string OperatingSystem,
+    string Architecture);
 
 public sealed record OfficeSecurityPostureReport(
     string Profile,

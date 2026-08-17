@@ -28,6 +28,27 @@ public sealed class ContractTests
     }
 
     [Fact]
+    public void AssistedRecoveryContractsRoundTripWithoutDroppingBoundActionOrReceipt()
+    {
+        var sessionId = Guid.NewGuid();
+        var redemption = new RedeemAssistedOfficeSetupResponse(
+            true, null, "ready", sessionId, "one-use-token", "https://office.example.test",
+            new string('a', 64), 6, 12288, 81920, 3, true, "reconnect", "setup-receipt");
+
+        var roundTrip = JsonSerializer.Deserialize<RedeemAssistedOfficeSetupResponse>(
+            JsonSerializer.Serialize(redemption));
+
+        Assert.Equal("reconnect", roundTrip!.ExistingInstallationAction);
+        Assert.Equal("setup-receipt", roundTrip.SetupReceipt);
+
+        var result = new ReportAssistedOfficeSetupResultRequest(
+            sessionId, "setup-receipt", "reconnect_unsafe", "machine-a", "windows", "x64");
+        var resultRoundTrip = JsonSerializer.Deserialize<ReportAssistedOfficeSetupResultRequest>(
+            JsonSerializer.Serialize(result));
+        Assert.Equal("machine-a", resultRoundTrip!.MachineName);
+    }
+
+    [Fact]
     public void SecurityPostureRoundTripsWithoutDroppingConsentOrControls()
     {
         var report = new OfficeSecurityPostureReport(
