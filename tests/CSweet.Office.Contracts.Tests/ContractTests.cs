@@ -91,6 +91,33 @@ public sealed class ContractTests
     }
 
     [Fact]
+    public void Toolchain_build_round_trips_exact_adapter_source_and_policy_bindings()
+    {
+        var value = new ToolchainBuildWorkloadSpecification(
+            Guid.NewGuid(), new("office.node-24", "1", "sha256:" + new string('a', 64), "linux", "x64"),
+            new(4, 400, 8192, 16384, 128, 1024 * 1024, TimeSpan.FromMinutes(20)),
+            new(Guid.NewGuid(), "1.0", new string('b', 32), "sha256:" + new string('a', 64),
+                "sha256:" + new string('c', 64), DateTimeOffset.UtcNow.AddMinutes(25)),
+            new("sha256:" + new string('c', 64), "signature", "1.0", "linux", "x64"),
+            new(Guid.NewGuid(), Guid.NewGuid().ToString("D"), Guid.NewGuid()),
+            new("https://github.com/example/game", new string('d', 40), false, "toolchain-source.v1", "1"),
+            Guid.NewGuid(), 7, "phaser.web-2d.v1", "web", "{\"mode\":\"release\"}",
+            ["CSweet.Plugins.Toolchain.NodeTypeScript"], ["registry.npmjs.org"],
+            512L * 1024 * 1024, 4L * 1024 * 1024 * 1024);
+
+        var roundTrip = JsonSerializer.Deserialize<ToolchainBuildWorkloadSpecification>(
+            JsonSerializer.Serialize(value));
+
+        Assert.NotNull(roundTrip);
+        Assert.Equal(WorkloadKind.ToolchainBuild, roundTrip.Kind);
+        Assert.Equal(value.AdapterArtifact, roundTrip.AdapterArtifact);
+        Assert.Equal(value.SourceRepository, roundTrip.SourceRepository);
+        Assert.Equal(value.DeliveryBuildId, roundTrip.DeliveryBuildId);
+        Assert.Equal(value.ExpectedBuildRevision, roundTrip.ExpectedBuildRevision);
+        Assert.Equal(value.AllowedDependencyRegistryHosts, roundTrip.AllowedDependencyRegistryHosts);
+    }
+
+    [Fact]
     public void Assignment_payload_is_deterministic()
     {
         var office = Guid.Parse("11111111-1111-1111-1111-111111111111");

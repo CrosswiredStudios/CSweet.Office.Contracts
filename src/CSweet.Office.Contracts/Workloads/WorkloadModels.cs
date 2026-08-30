@@ -12,7 +12,8 @@ public enum AgentTrustLevel
 public enum WorkloadKind
 {
     Builder,
-    Runtime
+    Runtime,
+    ToolchainBuild
 }
 
 public sealed record WorkloadResourceLimits(
@@ -98,3 +99,26 @@ public sealed record RuntimeWorkloadSpecification(
     RuntimeAgentIdentity Identity,
     IReadOnlyList<string> Entrypoint)
     : WorkloadSpecification(WorkloadId, WorkloadKind.Runtime, GuestImage, ResourceLimits, BrokerLease);
+
+/// <summary>
+/// Executes an immutable toolchain adapter against an exact source revision in a disposable Office VM.
+/// Source retrieval and dependency restore are brokered; repository and registry credentials never enter the guest.
+/// </summary>
+public sealed record ToolchainBuildWorkloadSpecification(
+    Guid WorkloadId,
+    GuestImageReference GuestImage,
+    WorkloadResourceLimits ResourceLimits,
+    BrokerChannelLease BrokerLease,
+    AgentArtifactReference AdapterArtifact,
+    RuntimeAgentIdentity Identity,
+    RepositoryDescriptor SourceRepository,
+    Guid DeliveryBuildId,
+    long ExpectedBuildRevision,
+    string RecipeKey,
+    string TargetKey,
+    string ConfigurationJson,
+    IReadOnlyList<string> Entrypoint,
+    IReadOnlyList<string> AllowedDependencyRegistryHosts,
+    long MaximumSourceBytes,
+    long MaximumOutputBytes)
+    : WorkloadSpecification(WorkloadId, WorkloadKind.ToolchainBuild, GuestImage, ResourceLimits, BrokerLease);
