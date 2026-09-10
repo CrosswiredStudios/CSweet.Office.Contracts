@@ -16,3 +16,7 @@ dotnet pack src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj -c Releas
 ```
 
 Consumers may opt into a sibling project reference by setting `UseLocalOfficeContracts=true`. Release validation must also run with that property disabled against the exact package version.
+
+## Version 0.6.0
+
+Adds Office certificate recovery challenge/response contracts and a domain-separated ECDSA P-256/SHA-256 proof payload. The additive wire protocol lets an already-approved Office recover an expired certificate using its original private key. Headquarters owns one-use challenge enforcement and authorization; the wire helpers grant no trust by themselves.
