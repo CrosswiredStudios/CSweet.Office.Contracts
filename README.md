@@ -15,8 +15,12 @@ dotnet test CSweet.Office.Contracts.slnx -c Release
 dotnet pack src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj -c Release -o artifacts/packages
 ```
 
-Consumers may opt into a sibling project reference by setting `UseLocalOfficeContracts=true`. Release validation must also run with that property disabled against the exact package version.
+Consumers automatically detect a sibling checkout. This package also detects a sibling CSweet.Isolation checkout; explicit false UseLocal properties retain package-only checks. Release validation must also run with that property disabled against the exact package version.
 
 ## Version 0.6.0
 
 Adds Office certificate recovery challenge/response contracts and a domain-separated ECDSA P-256/SHA-256 proof payload. The additive wire protocol lets an already-approved Office recover an expired certificate using its original private key. Headquarters owns one-use challenge enforcement and authorization; the wire helpers grant no trust by themselves.
+
+## Version 0.6.1
+
+Compatible maintenance: reuse the neutral isolation signature encoder with the original Office byte format, detect sibling isolation source automatically, and preserve the 0.6.0 certificate-recovery contracts. Office and Headquarters pins must remain synchronized.

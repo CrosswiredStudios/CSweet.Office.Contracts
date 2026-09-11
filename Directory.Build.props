@@ -6,4 +6,10 @@
     <LangVersion>latest</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- Prefer sibling source checkouts; explicit false retains package-only release validation. -->
+    <CSweetIsolationRepositoryRoot Condition="'$(CSweetIsolationRepositoryRoot)' == ''">$(MSBuildThisFileDirectory)..\CSweet.Isolation</CSweetIsolationRepositoryRoot>
+    <UseLocalIsolation Condition="'$(UseLocalIsolation)' == '' and Exists('$(CSweetIsolationRepositoryRoot)\src\CSweet.Isolation.Security\CSweet.Isolation.Security.csproj')">true</UseLocalIsolation>
+    <UseLocalIsolation Condition="'$(UseLocalIsolation)' == ''">false</UseLocalIsolation>
+  </PropertyGroup>
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>CSweet.Office.Contracts</PackageId>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <PackageVersion Condition="'$(CSweetOfficeContractsPackageVersion)' != ''">$(CSweetOfficeContractsPackageVersion)</PackageVersion>
     <Authors>C-Sweet</Authors>
     <Company>C-Sweet</Company>
@@ -27,5 +27,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="$(CSweetIsolationRepositoryRoot)/src/CSweet.Isolation.Security/CSweet.Isolation.Security.csproj" Condition="'$(UseLocalIsolation)' == 'true'" />
+    <PackageReference Include="CSweet.Isolation.Security" Version="0.1.0" Condition="'$(UseLocalIsolation)' != 'true'" />
   </ItemGroup>
 </Project>
