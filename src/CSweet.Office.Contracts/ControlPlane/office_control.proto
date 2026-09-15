@@ -41,6 +41,7 @@ message OfficeHeartbeat {
   int32 maximum_concurrent_workloads = 5;
   repeated OfficeProviderInventory providers = 6;
   OfficeSecurityPosture security_posture = 7;
+  string office_version = 8;
 }
 message OfficeSecurityPosture {
   string profile = 1; bool mixed_use_host = 2; bool development_assignments_allowed = 3;

@@ -24,3 +24,7 @@ Adds Office certificate recovery challenge/response contracts and a domain-separ
 ## Version 0.6.1
 
 Compatible maintenance: reuse the neutral isolation signature encoder with the original Office byte format, detect sibling isolation source automatically, and preserve the 0.6.0 certificate-recovery contracts. Office and Headquarters pins must remain synchronized.
+
+## Version 0.7.0
+
+Adds the optional OfficeVersion heartbeat field to HTTP and gRPC control messages. Headquarters can refresh the reported runtime version after an in-place update. Older senders remain compatible.

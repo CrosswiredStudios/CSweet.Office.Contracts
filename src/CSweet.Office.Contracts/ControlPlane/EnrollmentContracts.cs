@@ -118,7 +118,8 @@ public sealed record OfficeHeartbeatRequest(
     int AllocatableDiskMb,
     int MaximumConcurrentWorkloads,
     IReadOnlyList<RegisterOfficeProviderRequest> Providers,
-    OfficeSecurityPostureReport? SecurityPosture = null);
+    OfficeSecurityPostureReport? SecurityPosture = null,
+    string? OfficeVersion = null);
 
 public sealed record OfficeCertificateRequest(string EnrollmentReceipt);
 
