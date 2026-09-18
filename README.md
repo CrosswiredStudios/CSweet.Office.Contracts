@@ -6,7 +6,7 @@ The package owns only cross-process protocol concerns: headquarters enrollment a
 
 ## Packages
 
-`CSweet.Office.Contracts` targets .NET 8 and is released with SourceLink and symbol packages. Releases follow semantic versioning. Breaking wire or public API changes require a major version; additive compatible changes require a minor version; compatible fixes require a patch version.
+`CSweet.Office.Contracts` targets .NET 10 and is released with SourceLink and symbol packages. Releases follow semantic versioning. Breaking wire or public API changes require a major version; additive compatible changes require a minor version; compatible fixes require a patch version.
 
 ## Local development
 
