@@ -4,7 +4,7 @@
 
 Breaking wire or public API change → major. Additive compatible change → minor. Compatible fix → patch. Every contract change increments `<Version>` in `CSweet.Office.Contracts.csproj` and updates downstream pins (Office + Headquarters must stay synchronized).
 
-Recent history: `0.6.0` certificate-recovery contracts; `0.6.1` neutral isolation encoder + sibling-source auto-detect (bytes unchanged); `0.7.0` optional `OfficeVersion` heartbeat field.
+Recent history: `0.6.0` certificate-recovery contracts; `0.6.1` neutral isolation encoder + sibling-source auto-detect (bytes unchanged); `0.7.0` optional `OfficeVersion` heartbeat field; `0.7.1` packaging/CI maintenance (no wire change).
 
 ## Sibling source vs. package
 

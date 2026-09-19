@@ -47,10 +47,10 @@ jobs:
           "id=$packageId" >> $env:GITHUB_OUTPUT
           "version=$version" >> $env:GITHUB_OUTPUT
           "tag=v$version" >> $env:GITHUB_OUTPUT
-      - run: dotnet restore CSweet.Office.Contracts.slnx
-      - run: dotnet build CSweet.Office.Contracts.slnx --configuration Release --no-restore
-      - run: dotnet test CSweet.Office.Contracts.slnx --configuration Release --no-build --no-restore
-      - run: dotnet pack src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj --configuration Release --no-build --no-restore --output artifacts/packages
+      - run: dotnet restore CSweet.Office.Contracts.slnx -p:UseLocalIsolation=false
+      - run: dotnet build CSweet.Office.Contracts.slnx --configuration Release --no-restore -p:UseLocalIsolation=false
+      - run: dotnet pack src/CSweet.Office.Contracts/CSweet.Office.Contracts.csproj --configuration Release --no-build --no-restore --output artifacts/packages -p:UseLocalIsolation=false
+      - run: dotnet test CSweet.Office.Contracts.slnx --configuration Release --no-build --no-restore -p:UseLocalIsolation=false
       - name: NuGet login (OIDC -> temporary API key)
         uses: NuGet/login@v1
         id: login

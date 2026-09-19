@@ -28,3 +28,7 @@ Compatible maintenance: reuse the neutral isolation signature encoder with the o
 ## Version 0.7.0
 
 Adds the optional OfficeVersion heartbeat field to HTTP and gRPC control messages. Headquarters can refresh the reported runtime version after an in-place update. Older senders remain compatible.
+
+## Version 0.7.1
+
+Compatible maintenance: NuGet packaging script plus CI/publish alignment with `CSweet.Agent.Sdk` (package-only validation, version-bump publish). No wire change.

@@ -6,7 +6,7 @@ Apply `AGENTS.md` plus the `docs/` reference (`README.md` index, `control-plane.
 
 Key facts for code completion and review:
 
-- `net10.0`, `Nullable` + `ImplicitUsings`, `LangVersion latest`. Package `CSweet.Office.Contracts 0.7.0`, MIT, SourceLink + `snupkg`.
+- `net10.0`, `Nullable` + `ImplicitUsings`, `LangVersion latest`. Package `CSweet.Office.Contracts 0.7.1`, MIT, SourceLink + `snupkg`.
 - `ControlPlane/EnrollmentContracts.cs`: HTTPS JSON `sealed record` claim/heartbeat/certificate/assisted-setup contracts. `OfficeVersion` optional (0.7.0).
 - `ControlPlane/office_control.proto`: `OfficeGateway` gRPC (`Connect`, `OpenWorkloadTunnel`, `DownloadArtifact`), package `csweet.office.v1`. Preserve unknown fields.
 - `ControlPlane/OfficeCertificateRecovery.cs`: payload is UTF-8 `"csweet-office-certificate-recovery-v1\n{officeId:D}\n{challenge}"`, P-256/SHA-256 IEEE P1363.
