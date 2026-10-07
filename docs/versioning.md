@@ -8,6 +8,8 @@ Recent history: `0.6.0` certificate-recovery contracts; `0.6.1` neutral isolatio
 
 ## Sibling source vs. package
 
+`0.8.0` adds assignment-stop reports and receipts. Both consumer pins are `0.8.0`; local validation uses the packed unpublished package with sibling references disabled. Publication and coordinated deployment are separate release gates.
+
 `Directory.Build.props` defaults `CSweetIsolationRepositoryRoot` to `../CSweet.Isolation` and sets `UseLocalIsolation=true` when that checkout's `CSweet.Isolation.Security.csproj` exists, else `false` (NuGet `CSweet.Isolation.Security 0.1.0`). Explicit `/p:UseLocalIsolation=false` forces package-only restore — required for release validation against the exact published version.
 
 ## Build / test / pack

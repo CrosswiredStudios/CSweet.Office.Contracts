@@ -4,6 +4,10 @@ Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Offic
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.
 
+## Version 0.8.0
+
+Adds `AssignmentStopped` reports and `AssignmentStopReceipt` acknowledgements. Reports identify the exact Office-bound assignment epoch and provider instance, or explicitly attest that creation was durably prevented. These messages grant no execution authority. The signed assignment format and protocol version remain unchanged. Coordinated Headquarters and Office implementation is required for confirmed shutdown; older peers do not provide stop evidence.
+
 ## Packages
 
 `CSweet.Office.Contracts` targets .NET 10 and is released with SourceLink and symbol packages. Releases follow semantic versioning. Breaking wire or public API changes require a major version; additive compatible changes require a minor version; compatible fixes require a patch version.

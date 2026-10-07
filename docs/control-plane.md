@@ -26,9 +26,9 @@ service OfficeGateway {
 
 ## Gateway messages
 
-`OfficeControlMessage`: `protocol_version=1`, `office_id=2`, `session_epoch=3`, oneof `heartbeat=10`, `lease_renewal=11`, `assignment_status=12`.
+`OfficeControlMessage`: `protocol_version=1`, `office_id=2`, `session_epoch=3`, oneof `heartbeat=10`, `lease_renewal=11`, `assignment_status=12`, `assignment_stopped=13`.
 
-`HeadquartersControlMessage`: same envelope, oneof `assignment=10`, `fence=11`, `drain=12`, `hello=13`.
+`HeadquartersControlMessage`: same envelope, oneof `assignment=10`, `fence=11`, `drain=12`, `hello=13`, `assignment_stop_receipt=14`.
 
 | Message | Key fields |
 |---|---|
@@ -44,6 +44,12 @@ service OfficeGateway {
 | `WorkloadTunnelFrame` | `office_id`, `assignment_id`, `fencing_epoch`, `sequence`, `content`, `completed`, `session_epoch`. |
 | `ArtifactDownloadRequest` | `protocol_version`, `office_id`, `session_epoch`, `assignment_id`, `fencing_epoch`, `artifact_digest`, `artifact_read_token`, `transfer_id`. |
 | `ArtifactChunk` | `offset`, `content`, `completed`, `total_size`, `sha256`. Reassemble by `offset`; verify `sha256`. |
+
+### Durable stop evidence (0.8.0)
+
+`OfficeControlMessage.assignment_stopped = 13` contains `AssignmentStopped(assignment_id, fencing_epoch, provider_id, provider_instance_id, never_created)`. `never_created` requires an empty instance ID and means creation was durably prevented; otherwise a nonempty exact instance ID is required. The outer envelope supplies the authenticated Office/session binding. This is teardown evidence, never a lease renewal or execution grant. Headquarters may fence an active attempt whose terminal status was lost.
+
+`HeadquartersControlMessage.assignment_stop_receipt = 14` contains `AssignmentStopReceipt(assignment_id, fencing_epoch, accepted)`. The receiver acknowledges only a persisted, matching report. A sender retains unacknowledged reports for replay and preserves local replay protection after acceptance. Duplicate and out-of-order delivery are expected; implementations retain attempt history across assignment fencing/reassignment. Older peers can preserve unknown protobuf fields but cannot supply this evidence. Source: `src/CSweet.Office.Contracts/ControlPlane/office_control.proto`; verification: `AssignmentStopContractTests`.
 
 ## HTTPS JSON contracts (`EnrollmentContracts.cs`)
 

@@ -17,6 +17,7 @@ message OfficeControlMessage {
     OfficeHeartbeat heartbeat = 10;
     AssignmentLeaseRenewal lease_renewal = 11;
     AssignmentStatusUpdate assignment_status = 12;
+    AssignmentStopped assignment_stopped = 13;
   }
 }
 
@@ -29,6 +30,7 @@ message HeadquartersControlMessage {
     FenceAssignment fence = 11;
     DrainOffice drain = 12;
     GatewayHello hello = 13;
+    AssignmentStopReceipt assignment_stop_receipt = 14;
   }
 }
 
@@ -63,6 +65,18 @@ message WorkloadAssignment {
   int64 issued_at_unix_seconds = 11; int32 authorization_version = 12;
 }
 message AssignmentLeaseRenewal { string assignment_id = 1; int64 fencing_epoch = 2; int64 requested_expiry_unix_seconds = 3; }
+// Sent only after the Office has confirmed teardown of this exact execution attempt.
+// Does not renew a lease or authorize execution. May fence an otherwise active attempt.
+message AssignmentStopped {
+  string assignment_id = 1; int64 fencing_epoch = 2;
+  string provider_id = 3; string provider_instance_id = 4;
+  // True only when the Office durably prevented creation of this attempt.
+  bool never_created = 5;
+}
+// Allows a durable Office outbox entry to be retired after idempotent recording.
+message AssignmentStopReceipt {
+  string assignment_id = 1; int64 fencing_epoch = 2; bool accepted = 3;
+}
 message AssignmentStatusUpdate {
   string assignment_id = 1; int64 fencing_epoch = 2; string status = 3; string failure_code = 4;
   string sanitized_failure = 5; string provider_instance_id = 6; string log_excerpt = 13;
