@@ -8,7 +8,7 @@ Recent history: `0.6.0` certificate-recovery contracts; `0.6.1` neutral isolatio
 
 ## Sibling source vs. package
 
-`0.8.0` adds assignment-stop reports and receipts. Both consumer pins are `0.8.0`; local validation uses the packed unpublished package with sibling references disabled. Publication and coordinated deployment are separate release gates.
+`0.8.0` adds assignment-stop reports and receipts. The original consumer pins were `0.8.0`; local validation uses the packed unpublished package with sibling references disabled. Publication and coordinated deployment are separate release gates.
 
 `Directory.Build.props` defaults `CSweetIsolationRepositoryRoot` to `../CSweet.Isolation` and sets `UseLocalIsolation=true` when that checkout's `CSweet.Isolation.Security.csproj` exists, else `false` (NuGet `CSweet.Isolation.Security 0.1.0`). Explicit `/p:UseLocalIsolation=false` forces package-only restore — required for release validation against the exact published version.
 
@@ -31,3 +31,5 @@ Inspect the `.nupkg` version before handoff (per `AGENTS.md`): version, README, 
 ## Tests as spec
 
 `tests/CSweet.Office.Contracts.Tests`: `ContractTests` (assisted-setup/posture/workload round-trips, payload determinism + field binding, digest vector, gateway round-trip + unknown-field preservation, oversized-frame rejection), `AssignmentEncodingCompatibilityTests` (frozen v1 bytes), `OfficeCertificateRecoveryTests` (domain string + JSON round-trip). Add a pinning test for any new canonical bytes.
+
+`0.9.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. Both current consumer pins are `0.9.0`; this is an additive teardown-only message. The signed assignment bytes remain unchanged.

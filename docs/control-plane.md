@@ -51,6 +51,10 @@ service OfficeGateway {
 
 `HeadquartersControlMessage.assignment_stop_receipt = 14` contains `AssignmentStopReceipt(assignment_id, fencing_epoch, accepted)`. The receiver acknowledges only a persisted, matching report. A sender retains unacknowledged reports for replay and preserves local replay protection after acceptance. Duplicate and out-of-order delivery are expected; implementations retain attempt history across assignment fencing/reassignment. Older peers can preserve unknown protobuf fields but cannot supply this evidence. Source: `src/CSweet.Office.Contracts/ControlPlane/office_control.proto`; verification: `AssignmentStopContractTests`.
 
+### Missing-stop reconciliation (0.9.0)
+
+`HeadquartersControlMessage.reconcile_assignment_stop = 15` contains `ReconcileAssignmentStop(assignment_id, fencing_epoch, provider_id)`. It requests teardown evidence for a retired exact attempt under the authenticated Office/session envelope. The receiver rechecks durable local ownership and creation state; the hint never permits execution or invents proof of teardown. Delivery may be repeated, missed, or reordered. Source: `src/CSweet.Office.Contracts/ControlPlane/office_control.proto`; verification: `AssignmentStopContractTests.RecoveryHintPreservesExactAttemptAndSessionWithoutExecutionAuthority`.
+
 ## HTTPS JSON contracts (`EnrollmentContracts.cs`)
 
 All records are `sealed record` (System.Text.Json round-trip tested). `DateTimeOffset` serializes as ISO-8601; GUIDs as `D` strings.

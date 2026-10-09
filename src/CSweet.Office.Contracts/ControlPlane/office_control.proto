@@ -31,6 +31,7 @@ message HeadquartersControlMessage {
     DrainOffice drain = 12;
     GatewayHello hello = 13;
     AssignmentStopReceipt assignment_stop_receipt = 14;
+    ReconcileAssignmentStop reconcile_assignment_stop = 15;
   }
 }
 
@@ -76,6 +77,10 @@ message AssignmentStopped {
 // Allows a durable Office outbox entry to be retired after idempotent recording.
 message AssignmentStopReceipt {
   string assignment_id = 1; int64 fencing_epoch = 2; bool accepted = 3;
+}
+// A teardown-only hint for an exact retired attempt. Never authorizes creation.
+message ReconcileAssignmentStop {
+  string assignment_id = 1; int64 fencing_epoch = 2; string provider_id = 3;
 }
 message AssignmentStatusUpdate {
   string assignment_id = 1; int64 fencing_epoch = 2; string status = 3; string failure_code = 4;
