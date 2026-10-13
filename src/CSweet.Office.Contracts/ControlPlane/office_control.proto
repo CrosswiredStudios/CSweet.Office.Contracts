@@ -58,6 +58,7 @@ message OfficeProviderInventory {
   int64 certification_expires_at_unix_seconds = 8; bool supports_builder_workloads = 9;
   bool supports_runtime_workloads = 10; bool is_available = 11; string unavailable_reason = 12;
   bool supports_toolchain_build_workloads = 13;
+  bool supports_public_internet = 14;
 }
 message WorkloadAssignment {
   string assignment_id = 1; string workload_id = 2; int64 fencing_epoch = 3; string provider_id = 4;

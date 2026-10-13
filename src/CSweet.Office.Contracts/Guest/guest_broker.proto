@@ -11,6 +11,7 @@ message GuestEnvelope {
     GuestHealth health = 14; ProxyRequest proxy_request = 15; ProxyResponse proxy_response = 16;
     StreamChunk stream_chunk = 17; StartCommand start_command = 18;
     ShutdownCommand shutdown_command = 19; GuestExit exit = 20; GuestBootFailure boot_failure = 21;
+    EgressFrame egress = 22;
   }
 }
 message GuestBootFailure { string reason_code = 1; string detail = 2; }
@@ -20,6 +21,15 @@ message GuestBootConfiguration {
   int64 lease_expires_at_unix_seconds = 7; string artifact_root = 8; int32 workload_kind = 9;
   string installation_id = 10; string business_id = 11; string tick_id = 12;
   string local_broker_socket_path = 13; string workload_token_path = 14; int32 maximum_frame_bytes = 15;
+  bool public_internet = 16;
+}
+// Scoped to the authenticated channel and signed assignment. TCP/UDP only; never a listen grant.
+message EgressFrame {
+  string flow_id = 1;
+  enum Operation { OPEN = 0; OPENED = 1; DATA = 2; CLOSE = 3; ERROR = 4; HALF_CLOSE = 5; CREDIT = 6; }
+  Operation operation = 2;
+  string address = 3; int32 port = 4; bool udp = 5; bytes data = 6;
+  string error_code = 7;
 }
 message GuestHello { string workload_id = 1; string channel_id = 2; string guest_image_digest = 3; string artifact_digest = 4; bytes ephemeral_public_key = 5; bytes boot_token_proof = 6; }
 message HostChallenge { bytes nonce = 1; int64 expires_at_unix_seconds = 2; }

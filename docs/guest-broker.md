@@ -48,3 +48,9 @@ Big-endian `int32` length prefix + protobuf payload over any `Stream`.
 - `WriteAsync<T>(stream, message, maximumFrameBytes, ct)`: rejects messages larger than the limit before writing.
 - `ReadAsync<T>(stream, parser, maximumFrameBytes, ct)`: returns `default` on clean EOF (zero prefix bytes); throws `EndOfStreamException` on truncated prefix/payload; throws `InvalidDataException` on negative/oversize length — checked before allocating (regression-tested).
 - `maximumFrameBytes` must be within `1..AbsoluteMaximumFrameBytes`; negotiated value comes from the handshake `GuestLease`.
+
+## Runtime public internet (0.10.0)
+
+`RuntimeWorkloadSpecification.NetworkPolicy` optionally carries `RuntimeNetworkPolicy` (`public-internet`, grant revision, blocked CIDRs); omission means restricted execution. `EnvironmentProfile` identifies the requested development profile. Both fields are bound by the original signed specification digest; authorization envelope encoding remains unchanged.
+
+Guest protocol 1.1 adds envelope field 22 (`EgressFrame`) and boot field 16 (`public_internet`). Egress uses flow-scoped open/opened/data/half-close/close/error operations for TCP and connected UDP. Office inventory field 14 (`supports_public_internet`) and the corresponding enrollment DTO property default false. Neither a manifest declaration nor inventory alone grants internet authority. Guest protocol 1.0 and all frozen signing vectors remain supported.

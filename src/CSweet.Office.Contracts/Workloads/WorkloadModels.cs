@@ -98,7 +98,25 @@ public sealed record RuntimeWorkloadSpecification(
     AgentArtifactReference Artifact,
     RuntimeAgentIdentity Identity,
     IReadOnlyList<string> Entrypoint)
-    : WorkloadSpecification(WorkloadId, WorkloadKind.Runtime, GuestImage, ResourceLimits, BrokerLease);
+    : WorkloadSpecification(WorkloadId, WorkloadKind.Runtime, GuestImage, ResourceLimits, BrokerLease)
+{
+    public RuntimeNetworkPolicy? NetworkPolicy { get; init; }
+    public string? EnvironmentProfile { get; init; }
+}
+
+public sealed record RuntimeNetworkPolicy(string Mode, long GrantRevision,
+    IReadOnlyList<string>? BlockedCidrs = null)
+{
+    public const string PublicInternet = "public-internet";
+    public const string PublicInternetIpv4 = "public-internet-ipv4";
+    public void Validate()
+    {
+        if (Mode is not (PublicInternet or PublicInternetIpv4) || GrantRevision < 1 || BlockedCidrs?.Count > 256)
+            throw new InvalidDataException("The runtime network policy is invalid.");
+        if (BlockedCidrs?.Any(cidr => !System.Net.IPNetwork.TryParse(cidr, out _)) == true)
+            throw new InvalidDataException("The runtime blocked CIDR policy is invalid.");
+    }
+}
 
 /// <summary>
 /// Executes an immutable toolchain adapter against an exact source revision in a disposable Office VM.

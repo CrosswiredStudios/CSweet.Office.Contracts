@@ -51,7 +51,7 @@ service OfficeGateway {
 
 `HeadquartersControlMessage.assignment_stop_receipt = 14` contains `AssignmentStopReceipt(assignment_id, fencing_epoch, accepted)`. The receiver acknowledges only a persisted, matching report. A sender retains unacknowledged reports for replay and preserves local replay protection after acceptance. Duplicate and out-of-order delivery are expected; implementations retain attempt history across assignment fencing/reassignment. Older peers can preserve unknown protobuf fields but cannot supply this evidence. Source: `src/CSweet.Office.Contracts/ControlPlane/office_control.proto`; verification: `AssignmentStopContractTests`.
 
-### Missing-stop reconciliation (0.9.0)
+### Missing-stop reconciliation (0.10.0)
 
 `HeadquartersControlMessage.reconcile_assignment_stop = 15` contains `ReconcileAssignmentStop(assignment_id, fencing_epoch, provider_id)`. It requests teardown evidence for a retired exact attempt under the authenticated Office/session envelope. The receiver rechecks durable local ownership and creation state; the hint never permits execution or invents proof of teardown. Delivery may be repeated, missed, or reordered. Source: `src/CSweet.Office.Contracts/ControlPlane/office_control.proto`; verification: `AssignmentStopContractTests.RecoveryHintPreservesExactAttemptAndSessionWithoutExecutionAuthority`.
 
@@ -89,3 +89,9 @@ Already-approved Office with expired cert proves possession of the original priv
 - `OfficeCertificateRecoveryProof.Payload(officeId, challenge)` = UTF-8 `"csweet-office-certificate-recovery-v1\n{officeId:D}\n{challenge}"`.
 
 HQ owns one-use challenge enforcement and authorization; helpers grant no trust. See [Security](security.md).
+
+## Runtime public internet (0.10.0)
+
+`RuntimeWorkloadSpecification.NetworkPolicy` optionally carries `RuntimeNetworkPolicy` (`public-internet`, grant revision, blocked CIDRs); omission means restricted execution. `EnvironmentProfile` identifies the requested development profile. Both fields are bound by the original signed specification digest; authorization envelope encoding remains unchanged.
+
+Guest protocol 1.1 adds envelope field 22 (`EgressFrame`) and boot field 16 (`public_internet`). Egress uses flow-scoped open/opened/data/half-close/close/error operations for TCP and connected UDP. Office inventory field 14 (`supports_public_internet`) and the corresponding enrollment DTO property default false. Neither a manifest declaration nor inventory alone grants internet authority. Guest protocol 1.0 and all frozen signing vectors remain supported.

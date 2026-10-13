@@ -32,4 +32,10 @@ Inspect the `.nupkg` version before handoff (per `AGENTS.md`): version, README, 
 
 `tests/CSweet.Office.Contracts.Tests`: `ContractTests` (assisted-setup/posture/workload round-trips, payload determinism + field binding, digest vector, gateway round-trip + unknown-field preservation, oversized-frame rejection), `AssignmentEncodingCompatibilityTests` (frozen v1 bytes), `OfficeCertificateRecoveryTests` (domain string + JSON round-trip). Add a pinning test for any new canonical bytes.
 
-`0.9.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. Both current consumer pins are `0.9.0`; this is an additive teardown-only message. The signed assignment bytes remain unchanged.
+`0.10.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. Both current consumer pins are `0.10.0`; this is an additive teardown-only message. The signed assignment bytes remain unchanged.
+
+## Runtime public internet (0.10.0)
+
+`RuntimeWorkloadSpecification.NetworkPolicy` optionally carries `RuntimeNetworkPolicy` (`public-internet`, grant revision, blocked CIDRs); omission means restricted execution. `EnvironmentProfile` identifies the requested development profile. Both fields are bound by the original signed specification digest; authorization envelope encoding remains unchanged.
+
+Guest protocol 1.1 adds envelope field 22 (`EgressFrame`) and boot field 16 (`public_internet`). Egress uses flow-scoped open/opened/data/half-close/close/error operations for TCP and connected UDP. Office inventory field 14 (`supports_public_internet`) and the corresponding enrollment DTO property default false. Neither a manifest declaration nor inventory alone grants internet authority. Guest protocol 1.0 and all frozen signing vectors remain supported.

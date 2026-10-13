@@ -95,7 +95,11 @@ public sealed record RegisterOfficeProviderRequest(
     bool SupportsRuntimeWorkloads,
     bool SupportsToolchainBuildWorkloads,
     bool IsAvailable,
-    string? UnavailableReason);
+    string? UnavailableReason)
+{
+    public bool SupportsPublicInternet { get; init; }
+    public bool SupportsPublicInternetIpv6 => SupportsPublicInternet && CertificationSuiteVersion == "csweet-hardware-vm-smoke-v15";
+}
 
 public sealed record ClaimOfficeResponse(
     bool Succeeded,
