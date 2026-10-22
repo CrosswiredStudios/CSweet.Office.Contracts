@@ -32,7 +32,9 @@ Inspect the `.nupkg` version before handoff (per `AGENTS.md`): version, README, 
 
 `tests/CSweet.Office.Contracts.Tests`: `ContractTests` (assisted-setup/posture/workload round-trips, payload determinism + field binding, digest vector, gateway round-trip + unknown-field preservation, oversized-frame rejection), `AssignmentEncodingCompatibilityTests` (frozen v1 bytes), `OfficeCertificateRecoveryTests` (domain string + JSON round-trip). Add a pinning test for any new canonical bytes.
 
-`0.10.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. Both current consumer pins are `0.10.0`; this is an additive teardown-only message. The signed assignment bytes remain unchanged.
+`0.10.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. This is an additive teardown-only message. The signed assignment bytes remain unchanged.
+
+`0.11.0` adds automatic Office update preparation DTOs in `ControlPlane/OfficeUpdatePreparation.cs`. Both current consumer pins are `0.11.0`. A preparation receipt and a fresh installer handoff have distinct purposes; neither changes signed assignment bytes or grants execution authority.
 
 ## Runtime public internet (0.10.0)
 

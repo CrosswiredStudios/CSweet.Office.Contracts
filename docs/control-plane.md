@@ -4,6 +4,10 @@ Two transports share one vocabulary: HTTPS JSON for enrollment/heartbeat/certifi
 
 Source files: `ControlPlane/EnrollmentContracts.cs`, `ControlPlane/OfficeCertificateRecovery.cs`, `ControlPlane/office_control.proto` (`GrpcServices="Both"`), `ProtocolVersions.cs`.
 
+## Automatic Office update preparation (0.11.0)
+
+`ControlPlane/OfficeUpdatePreparation.cs` defines `BeginOfficeUpdatePreparationRequest`, `OfficeUpdatePreparationRequest`, and `OfficeUpdatePreparationResponse`. The initial request exchanges the machine-bound browser handoff for a bounded preparation receipt. Progress requests report verified preparation or a bounded failure code; an installation handoff is returned separately after Headquarters confirms workload teardown. These DTOs add no execution grant and leave the existing control-plane protocol version unchanged.
+
 ## Protocol version
 
 `ProtocolVersions.ControlPlaneV1 = "1.0"`. Sent as `protocol_version` on every `OfficeControlMessage`, `HeadquartersControlMessage`, and `ArtifactDownloadRequest`. Unknown protobuf fields must be preserved on round-trip (covered by `ContractTests.Generated_gateway_preserves_unknown_fields`).

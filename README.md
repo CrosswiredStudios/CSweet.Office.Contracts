@@ -4,6 +4,10 @@ Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Offic
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.
 
+## Version 0.11.0
+
+Adds machine-bound automatic-update preparation contracts in `ControlPlane/OfficeUpdatePreparation.cs`. A short-lived handoff is exchanged once for a bounded preparation receipt; verified preparation and confirmed workload teardown precede a fresh installation handoff. These receipts grant no workload execution authority. Existing enrollment and signed assignment formats remain unchanged.
+
 ## Version 0.10.0
 
 Adds the teardown-only `ReconcileAssignmentStop` hint for the exact Office-bound assignment epoch and provider. It supports bounded heartbeat/reconnect discovery of missing stop evidence, including cancelled or superseded attempts. It grants no execution authority and leaves signed assignment bytes unchanged. Coordinated Headquarters and Office deployment is required.
