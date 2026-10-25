@@ -1,5 +1,15 @@
 # Control Plane
 
+## Office installation storage (0.12.0)
+
+`OfficeInstallationLocation` carries `VolumeId`, `InstallRoot`, `DataRoot`, and `RequiredDiskMb`.
+`AssistedOfficePreflightResponse.Storage` and `RedeemAssistedOfficeSetupResponse.Storage` are optional;
+`AssistedOfficePreflightRequest.ExistingStorage` reports an installed destination for reassignment.
+Installers verify paths and current mounted-volume identity locally before using these values.
+Older payloads that omit storage deserialize with null. These fields are setup concerns and do not
+add paths to the workload/helper protocol.
+
+
 Two transports share one vocabulary: HTTPS JSON for enrollment/heartbeat/certificates, and gRPC (`office_control.proto`) for the long-lived gateway.
 
 Source files: `ControlPlane/EnrollmentContracts.cs`, `ControlPlane/OfficeCertificateRecovery.cs`, `ControlPlane/office_control.proto` (`GrpcServices="Both"`), `ProtocolVersions.cs`.

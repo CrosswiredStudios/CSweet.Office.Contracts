@@ -4,6 +4,13 @@ Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Offic
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.
 
+## Version 0.12.0
+
+Adds optional `OfficeInstallationLocation` storage to assisted preflight/redemption responses and
+an optional existing-location report to preflight requests. Volume identity, resolved roots, and
+installation free-space requirements travel through the authenticated setup flow. Missing storage
+preserves legacy wire compatibility; no assignment bytes or workload authorization change.
+
 ## Version 0.11.0
 
 Adds machine-bound automatic-update preparation contracts in `ControlPlane/OfficeUpdatePreparation.cs`. A short-lived handoff is exchanged once for a bounded preparation receipt; verified preparation and confirmed workload teardown precede a fresh installation handoff. These receipts grant no workload execution authority. Existing enrollment and signed assignment formats remain unchanged.

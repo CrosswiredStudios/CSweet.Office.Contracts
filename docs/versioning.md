@@ -34,10 +34,14 @@ Inspect the `.nupkg` version before handoff (per `AGENTS.md`): version, README, 
 
 `0.10.0` adds `ReconcileAssignmentStop` in HeadquartersControlMessage field 15. This is an additive teardown-only message. The signed assignment bytes remain unchanged.
 
-`0.11.0` adds automatic Office update preparation DTOs in `ControlPlane/OfficeUpdatePreparation.cs`. Both current consumer pins are `0.11.0`. A preparation receipt and a fresh installer handoff have distinct purposes; neither changes signed assignment bytes or grants execution authority.
+`0.11.0` adds automatic Office update preparation DTOs in `ControlPlane/OfficeUpdatePreparation.cs`. The corresponding consumer pins were `0.11.0`. A preparation receipt and a fresh installer handoff have distinct purposes; neither changes signed assignment bytes or grants execution authority.
 
 ## Runtime public internet (0.10.0)
 
 `RuntimeWorkloadSpecification.NetworkPolicy` optionally carries `RuntimeNetworkPolicy` (`public-internet`, grant revision, blocked CIDRs); omission means restricted execution. `EnvironmentProfile` identifies the requested development profile. Both fields are bound by the original signed specification digest; authorization envelope encoding remains unchanged.
 
 Guest protocol 1.1 adds envelope field 22 (`EgressFrame`) and boot field 16 (`public_internet`). Egress uses flow-scoped open/opened/data/half-close/close/error operations for TCP and connected UDP. Office inventory field 14 (`supports_public_internet`) and the corresponding enrollment DTO property default false. Neither a manifest declaration nor inventory alone grants internet authority. Guest protocol 1.0 and all frozen signing vectors remain supported.
+
+`0.12.0` adds optional assisted-setup installation storage. Both current consumer pins are `0.12.0`.
+Headquarters requires Office 0.13.0 or newer for sessions carrying a storage selection, so older
+installers cannot silently ignore the chosen drive.

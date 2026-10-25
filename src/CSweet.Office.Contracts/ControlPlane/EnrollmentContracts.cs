@@ -41,7 +41,11 @@ public sealed record RedeemAssistedOfficeSetupResponse(
     int MaximumConcurrentWorkloads,
     bool MixedUseHost,
     string ExistingInstallationAction = "none",
-    string? SetupReceipt = null);
+    string? SetupReceipt = null,
+    OfficeInstallationLocation? Storage = null);
+
+/// <summary>Installer-selected host storage, never an assignment-supplied path.</summary>
+public sealed record OfficeInstallationLocation(string VolumeId, string InstallRoot, string DataRoot, int RequiredDiskMb = 0);
 
 public sealed record AssistedOfficePreflightRequest(
     string HandoffSecret,
@@ -49,7 +53,8 @@ public sealed record AssistedOfficePreflightRequest(
     string OperatingSystem,
     string Architecture,
     string OfficeVersion,
-    string ExistingInstallationState);
+    string ExistingInstallationState,
+    OfficeInstallationLocation? ExistingStorage = null);
 
 public sealed record AssistedOfficePreflightResponse(
     bool Succeeded,
@@ -58,7 +63,8 @@ public sealed record AssistedOfficePreflightResponse(
     Guid? AssistedSetupSessionId,
     string ExistingInstallationAction,
     bool ProceedToRedemption,
-    string? SetupReceipt = null);
+    string? SetupReceipt = null,
+    OfficeInstallationLocation? Storage = null);
 
 public sealed record ReportAssistedOfficeSetupResultRequest(
     Guid AssistedSetupSessionId,
