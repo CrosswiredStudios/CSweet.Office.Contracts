@@ -4,6 +4,14 @@ Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Offic
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.
 
+## Version 0.13.0
+
+Adds guest protocol 1.2. Proxy request and response bodies can be streamed in bounded, credited
+`ProxyBodyFrame` messages, so a transfer is no longer limited to one envelope; inline bodies and
+protocol 1.0/1.1 peers are unchanged. `RuntimeWorkloadSpecification.PersistentDisk` optionally
+authorizes one Office-kept disk by opaque identifier and generation, and providers report
+`supports_persistent_disk`. Omission preserves existing behaviour; signed assignment bytes are unchanged.
+
 ## Version 0.12.0
 
 Adds optional `OfficeInstallationLocation` storage to assisted preflight/redemption responses and

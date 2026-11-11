@@ -1,6 +1,6 @@
 # C-Sweet Office Contracts — Documentation Index
 
-`CSweet.Office.Contracts` (currently `0.12.0`, `net10.0`) owns only cross-process wire concerns shared by C-Sweet Headquarters and C-Sweet Office.
+`CSweet.Office.Contracts` (currently `0.13.0`, `net10.0`) owns only cross-process wire concerns shared by C-Sweet Headquarters and C-Sweet Office.
 
 Start here, then go deep:
 
@@ -26,7 +26,7 @@ Out of scope (lives in the Office repo, never here): privileged provider interfa
 - Build-time deps: `Grpc.Tools 2.83.0` (`PrivateAssets="All"`), `Microsoft.SourceLink.GitHub`.
 - Isolation dep: `CSweet.Isolation.Security 0.1.0` via NuGet, or sibling source at `../CSweet.Isolation` when present (see [Versioning & release](versioning.md)).
 - Proto codegen: `ControlPlane/office_control.proto` (`GrpcServices="Both"`), `Guest/guest_broker.proto` (`GrpcServices="None"` — manual framing only).
-- Protocol constants (`ProtocolVersions`): `ControlPlaneV1 = "1.0"`, `GuestBrokerV1 = "1.0"`.
+- Protocol constants (`ProtocolVersions`): `ControlPlaneV1 = "1.0"`, `GuestBrokerV1 = "1.0"`, `GuestBrokerV11 = "1.1"`, `GuestBrokerV12 = "1.2"`.
 
 ## Quick consume
 

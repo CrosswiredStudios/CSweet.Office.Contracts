@@ -105,6 +105,7 @@ public sealed record RegisterOfficeProviderRequest(
 {
     public bool SupportsPublicInternet { get; init; }
     public bool SupportsPublicInternetIpv6 => SupportsPublicInternet && CertificationSuiteVersion == "csweet-hardware-vm-smoke-v15";
+    public bool SupportsPersistentDisk { get; init; }
 }
 
 public sealed record ClaimOfficeResponse(

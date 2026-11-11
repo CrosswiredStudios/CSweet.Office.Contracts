@@ -18,9 +18,10 @@ Out of scope: provider interfaces, RuntimeHost RPC, persistence, scheduling, vir
   - `Guest/guest_broker.proto` — guest envelope (`GrpcServices="None"`, manual framing only).
   - `Guest/GuestHandshake.cs` — `GuestHandshakeClient`/`GuestHandshakeVerifier` (HMAC boot proof + P-256 challenge).
   - `Guest/LengthDelimitedProtobuf.cs` — big-endian int32 framing, 1 MiB default / 16 MiB absolute max.
+  - `Guest/ProxyBodyStreaming.cs` — protocol 1.2 streamed proxy body bounds and frame validation.
   - `Security/AssignmentEnvelope.cs` — adapter over `CSweet.Isolation.Security.WorkloadAuthorizationEnvelope`; frozen v1 bytes.
   - `Workloads/WorkloadModels.cs` — `WorkloadKind` + `Builder`/`Runtime`/`ToolchainBuild` specs, `Validate()` bounds.
-  - `ProtocolVersions.cs` — `ControlPlaneV1="1.0"`, `GuestBrokerV1="1.0"`.
+  - `ProtocolVersions.cs` — `ControlPlaneV1="1.0"`, `GuestBrokerV1="1.0"`, `GuestBrokerV11="1.1"`, `GuestBrokerV12="1.2"`.
 - `tests/CSweet.Office.Contracts.Tests/` — round-trip, determinism, frozen-bytes, unknown-field, oversize-frame tests.
 - `docs/` — human/agent contract reference: `README.md` index, `control-plane.md`, `guest-broker.md`, `workloads.md`, `security.md`, `versioning.md`.
 

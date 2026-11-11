@@ -6,7 +6,7 @@ Source files: `Guest/guest_broker.proto`, `Guest/GuestHandshake.cs`, `Guest/Leng
 
 ## Protocol version
 
-`ProtocolVersions.GuestBrokerV1 = "1.0"`. Carried in `GuestEnvelope.protocol_version`, `GuestBootConfiguration.protocol_version`, and `ExpectedGuestIdentity.ProtocolVersion`.
+`ProtocolVersions.GuestBrokerV1 = "1.0"`, `GuestBrokerV11 = "1.1"` (public egress) and `GuestBrokerV12 = "1.2"` (streamed proxy bodies, persistent disk). Carried in `GuestEnvelope.protocol_version`, `GuestBootConfiguration.protocol_version`, and `ExpectedGuestIdentity.ProtocolVersion`.
 
 ## Envelope (`guest_broker.proto`, `csweet.office.guest.v1`)
 
@@ -20,12 +20,14 @@ Source files: `Guest/guest_broker.proto`, `Guest/GuestHandshake.cs`, `Guest/Leng
 | 12 | `GuestProof` | guest → host | `signature` (ECDSA P-256/SHA-256 over challenge payload). |
 | 13 | `GuestLease` | host → guest | `accepted`, `reason_code`, `expires_at_unix_seconds`, `maximum_frame_bytes`. |
 | 14 | `GuestHealth` | guest → host | `state`, `uptime_seconds`. |
-| 15/16 | `ProxyRequest`/`ProxyResponse` | bidi | `request_id`-correlated; request has `purpose`, `method`, `path`, `headers{}`, `body`; response has `status_code`, `headers{}`, `body`, `error_code`. |
+| 15/16 | `ProxyRequest`/`ProxyResponse` | bidi | `request_id`-correlated; request has `purpose`, `method`, `path`, `headers{}`, `body`; response has `status_code`, `headers{}`, `body`, `error_code`. Protocol 1.2 adds `body_streamed` to both. |
 | 17 | `StreamChunk` | bidi | `stream_id`, `sequence`, `content`, `completed`, `digest`. |
 | 18 | `StartCommand` | host → guest | `workload_kind`, `entrypoint[]`, `build_profile_id`, `maximum_log_bytes`, `environment{}`, `maximum_output_bytes`. |
 | 19 | `ShutdownCommand` | host → guest | `reason_code`, `grace_period_seconds`. |
 | 20 | `GuestExit` | guest → host | `exit_code`, `reason_code`, `detail`. |
 | 21 | `GuestBootFailure` | guest → host | `reason_code`, `detail`. |
+| 22 | `EgressFrame` | bidi | Protocol 1.1 public egress flow frames. |
+| 23 | `ProxyBodyFrame` | bidi | Protocol 1.2 streamed proxy body: `request_id`, `direction`, `operation`, `sequence`, `data`, `error_code`. |
 
 ## Handshake (`GuestHandshake.cs`)
 
@@ -54,3 +56,9 @@ Big-endian `int32` length prefix + protobuf payload over any `Stream`.
 `RuntimeWorkloadSpecification.NetworkPolicy` optionally carries `RuntimeNetworkPolicy` (`public-internet`, grant revision, blocked CIDRs); omission means restricted execution. `EnvironmentProfile` identifies the requested development profile. Both fields are bound by the original signed specification digest; authorization envelope encoding remains unchanged.
 
 Guest protocol 1.1 adds envelope field 22 (`EgressFrame`) and boot field 16 (`public_internet`). Egress uses flow-scoped open/opened/data/half-close/close/error operations for TCP and connected UDP. Office inventory field 14 (`supports_public_internet`) and the corresponding enrollment DTO property default false. Neither a manifest declaration nor inventory alone grants internet authority. Guest protocol 1.0 and all frozen signing vectors remain supported.
+
+## Streamed proxy bodies and persistent workload disk (0.13.0)
+
+Guest protocol 1.2 (`ProtocolVersions.GuestBrokerV12`) adds envelope field 23 (`ProxyBodyFrame`), `body_streamed` on `ProxyRequest` (field 7) and `ProxyResponse` (field 6), and boot field 17 (`persistent_disk`). A streamed request or response carries an empty inline `body`; its content follows as `ProxyBodyFrame` messages for the same `request_id`: `DATA` frames of at most `ProxyBodyStreaming.MaximumDataBytes` with a zero-based contiguous `sequence` per direction, then `END` whose `sequence` equals the number of `DATA` frames sent. Each direction starts with `ProxyBodyStreaming.InitialCredits`; the receiver returns one `CREDIT`, naming the direction it credits, per consumed `DATA` frame. `ABORT` ends the request with an `error_code`. `ProxyBodyStreaming.Validate` rejects frames that are malformed on their own; sequence and credit accounting are receiver state. Inline bodies are unchanged, so protocol 1.0 and 1.1 peers interoperate as before, and a sender streams only to a peer that negotiated 1.2.
+
+`RuntimeWorkloadSpecification.PersistentDisk` optionally carries `RuntimePersistentDisk(DiskId, Generation, MaximumMegabytes)`; omission means no state outlives the virtual machine. The Office derives the disk location from `DiskId`; no path, device or mount option is carried. A `Generation` above the one the Office holds for the disk requires a blank replacement, and a lower one is stale and refused. The field is bound by the signed specification digest; authorization envelope encoding is unchanged. `OfficeProviderInventory` field 15 (`supports_persistent_disk`) and `RegisterOfficeProviderRequest.SupportsPersistentDisk` default false, and Headquarters sets `PersistentDisk` only for a provider that reports support. All frozen signing vectors remain valid.

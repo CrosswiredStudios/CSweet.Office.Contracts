@@ -102,6 +102,7 @@ public sealed record RuntimeWorkloadSpecification(
 {
     public RuntimeNetworkPolicy? NetworkPolicy { get; init; }
     public string? EnvironmentProfile { get; init; }
+    public RuntimePersistentDisk? PersistentDisk { get; init; }
 }
 
 public sealed record RuntimeNetworkPolicy(string Mode, long GrantRevision,
@@ -115,6 +116,20 @@ public sealed record RuntimeNetworkPolicy(string Mode, long GrantRevision,
             throw new InvalidDataException("The runtime network policy is invalid.");
         if (BlockedCidrs?.Any(cidr => !System.Net.IPNetwork.TryParse(cidr, out _)) == true)
             throw new InvalidDataException("The runtime blocked CIDR policy is invalid.");
+    }
+}
+
+/// <summary>
+/// Authorizes one Office-kept disk that outlives the runtime's virtual machine. Omission means no
+/// state persists. The Office derives the disk's location from <see cref="DiskId"/>; no path is carried.
+/// A <see cref="Generation"/> above the one the Office holds for the disk requires a blank replacement.
+/// </summary>
+public sealed record RuntimePersistentDisk(Guid DiskId, long Generation, int MaximumMegabytes)
+{
+    public void Validate()
+    {
+        if (DiskId == Guid.Empty || Generation < 1 || MaximumMegabytes is < 64 or > 1_048_576)
+            throw new InvalidDataException("The runtime persistent disk is invalid.");
     }
 }
 
