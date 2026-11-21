@@ -12,6 +12,8 @@ Source file: `Workloads/WorkloadModels.cs`.
 
 ## Base record
 
+`ComputeEnvironmentWorkloadSpecification` binds a Linux environment to its business and installation in the native Hyper-V helper. Its authority comes from the signed compute dispatch on the Office control stream. Generic execution assignments continue to accept the existing builder, runtime and toolchain kinds.
+
 `WorkloadSpecification(WorkloadId, Kind, GuestImage, ResourceLimits, BrokerLease)` — abstract; `Kind` discriminates. Serialized as `specification_json` inside `WorkloadAssignment` with `specification_sha256` = `AssignmentEnvelope.Digest(json)` (see [Security](security.md)).
 
 ## Concrete specifications

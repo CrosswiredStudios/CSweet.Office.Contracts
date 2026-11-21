@@ -18,6 +18,8 @@ message OfficeControlMessage {
     AssignmentLeaseRenewal lease_renewal = 11;
     AssignmentStatusUpdate assignment_status = 12;
     AssignmentStopped assignment_stopped = 13;
+    OfficeComputeResult compute_result = 14;
+    OfficeComputeMaintenance compute_maintenance = 15;
   }
 }
 
@@ -32,6 +34,9 @@ message HeadquartersControlMessage {
     GatewayHello hello = 13;
     AssignmentStopReceipt assignment_stop_receipt = 14;
     ReconcileAssignmentStop reconcile_assignment_stop = 15;
+    OfficeComputeDispatch compute_dispatch = 16;
+    OfficeComputeReceipt compute_receipt = 17;
+    OfficeComputeReceipt compute_maintenance_receipt = 18;
   }
 }
 
@@ -45,6 +50,26 @@ message OfficeHeartbeat {
   repeated OfficeProviderInventory providers = 6;
   OfficeSecurityPosture security_posture = 7;
   string office_version = 8;
+  OfficeComputeOffer compute_offer = 9;
+}
+// One machine-approved business partition. An absent offer opts out of new placements.
+message OfficeComputeOffer {
+  string organization_id = 1;
+  string template_id = 2;
+  string image_digest = 3;
+  repeated string features = 4;
+  int32 maximum_environments = 5;
+  int32 cpu_count = 6;
+  int32 memory_mib = 7;
+  int32 disk_mib = 8;
+}
+// Packet and result bytes use the existing CSweet.Compute v1 encoding. The Office
+// relays the Headquarters-signed packet unchanged to its local physical executor.
+message OfficeComputeDispatch { bytes packet_json = 1; }
+message OfficeComputeResult { bytes signed_result_json = 1; }
+message OfficeComputeMaintenance { bytes signed_delivery_json = 1; }
+message OfficeComputeReceipt {
+  string operation_id = 1; int64 sequence = 2; string payload_digest = 3; bytes signature = 4;
 }
 message OfficeSecurityPosture {
   string profile = 1; bool mixed_use_host = 2; bool development_assignments_allowed = 3;

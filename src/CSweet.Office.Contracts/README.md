@@ -6,6 +6,10 @@ This package contains only cross-process messages, workload specifications, prot
 framing, and signature canonicalization. Platform persistence, scheduling, provider interfaces,
 RuntimeHost RPC, and virtualization implementations do not belong here.
 
+## Version 0.14.1
+
+The Office control stream carries an optional compute capacity offer, a signed compute dispatch, a signed provider result and its receipt.
+
 ## Version 0.13.0
 
 Adds guest protocol 1.2. Proxy request and response bodies can be streamed in bounded, credited

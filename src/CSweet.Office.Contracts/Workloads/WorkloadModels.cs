@@ -13,7 +13,8 @@ public enum WorkloadKind
 {
     Builder,
     Runtime,
-    ToolchainBuild
+    ToolchainBuild,
+    ComputeEnvironment
 }
 
 public sealed record WorkloadResourceLimits(
@@ -80,6 +81,12 @@ public abstract record WorkloadSpecification(
     GuestImageReference GuestImage,
     WorkloadResourceLimits ResourceLimits,
     BrokerChannelLease BrokerLease);
+
+// The signed compute packet supplies operation and tenant authority. Only the
+// offline executor constructs this input to the Office platform helper.
+public sealed record ComputeEnvironmentWorkloadSpecification(Guid WorkloadId, GuestImageReference GuestImage,
+    WorkloadResourceLimits ResourceLimits, BrokerChannelLease BrokerLease, Guid OrganizationId, Guid InstallationId)
+    : WorkloadSpecification(WorkloadId, WorkloadKind.ComputeEnvironment, GuestImage, ResourceLimits, BrokerLease);
 
 public sealed record BuilderWorkloadSpecification(
     Guid WorkloadId,

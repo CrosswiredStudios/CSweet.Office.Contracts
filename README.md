@@ -4,6 +4,10 @@ Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Offic
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.
 
+## Version 0.14.1
+
+The Office control stream carries an optional compute capacity offer, a signed compute dispatch, a signed provider result and its receipt.
+
 ## Version 0.13.0
 
 Adds guest protocol 1.2. Proxy request and response bodies can be streamed in bounded, credited
