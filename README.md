@@ -1,5 +1,9 @@
 # CSweet.Office.Contracts
 
+## Version 0.15.0
+
+Adds the public Office linking request, matching code and encrypted enrollment grant. Existing claim and assisted installation messages remain compatible.
+
 Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Office.
 
 The package owns only cross-process protocol concerns: headquarters enrollment and control-plane gRPC messages, guest broker framing and authentication, portable workload specifications, and canonical assignment signatures. Privileged provider interfaces and RuntimeHost local RPC remain private to the Office repository.

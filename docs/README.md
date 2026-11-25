@@ -1,6 +1,6 @@
 # C-Sweet Office Contracts — Documentation Index
 
-`CSweet.Office.Contracts` (currently `0.14.1`, `net10.0`) owns only cross-process wire concerns shared by C-Sweet Headquarters and C-Sweet Office.
+`CSweet.Office.Contracts` (currently `0.15.0`, `net10.0`) owns only cross-process wire concerns shared by C-Sweet Headquarters and C-Sweet Office.
 
 Start here, then go deep:
 

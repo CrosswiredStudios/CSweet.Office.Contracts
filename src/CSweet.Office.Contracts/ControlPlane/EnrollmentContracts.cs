@@ -18,7 +18,10 @@ public sealed record ClaimOfficeRequest(
     int MaximumConcurrentWorkloads,
     IReadOnlyList<RegisterOfficeProviderRequest> Providers,
     OfficeSecurityPostureReport? SecurityPosture = null,
-    Guid? AssistedSetupSessionId = null);
+    Guid? AssistedSetupSessionId = null)
+{
+    public OfficeLinkClaimProof? LinkProof { get; init; }
+}
 
 public sealed record RedeemAssistedOfficeSetupRequest(
     string HandoffSecret,

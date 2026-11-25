@@ -1,5 +1,9 @@
 # Versioning & Release
 
+## Version 0.15.0
+
+Adds the public Office linking request, matching code and encrypted enrollment grant. Existing claim and assisted installation messages remain compatible.
+
 ## SemVer
 
 Breaking wire or public API change → major. Additive compatible change → minor. Compatible fix → patch. Every contract change increments `<Version>` in `CSweet.Office.Contracts.csproj` and updates downstream pins (Office + Headquarters must stay synchronized).

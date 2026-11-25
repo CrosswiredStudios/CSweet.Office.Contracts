@@ -1,5 +1,9 @@
 # C-Sweet Office Contracts
 
+## Version 0.15.0
+
+Adds the public Office linking request, matching code and encrypted enrollment grant. Existing claim and assisted installation messages remain compatible.
+
 Dependency-light wire contracts shared by C-Sweet Headquarters and C-Sweet Office.
 
 This package contains only cross-process messages, workload specifications, protocol constants,
